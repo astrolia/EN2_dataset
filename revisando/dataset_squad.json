@@ -1,0 +1,62 @@
+{
+  "data": [
+    {
+      "title": "exemplo",
+      "paragraphs": [
+        {
+          "context": "Sendo, pois, de duas espécies a virtude, intelectual e moral, a primeira, por via de regra, gera-se e cresce graças ao ensino - por isso requer experiência e tempo; enquanto a virtude moral é adquirida em resultado do hábito, donde ter-se formado o seu nome por uma pequena modificação da palavra (em grego, a vogal 'e' do termo ethos é escrita ora com epsilon, ora com etha, significando respectivamente hábito ou caráter). Por tudo isso, evidencia-se também que nenhuma das virtudes morais surge em nós por natureza; com efeito, nada do que existe naturalmente pode formar um hábito contrário à sua natureza. Por exemplo, à pedra que por natureza se move para baixo não se pode imprimir o hábito de ir para cima, ainda que tentemos adestrá-la jogando-a dez mil vezes no ar; nem se pode habituar o fogo a dirigir-se para baixo, nem qualquer coisa que por natureza se comporte de certa maneira a comportar-se de outra.",
+          "qas": [
+            {
+              "id": "ed485323-2391-4332-b5d7-3ad5b2700cd5",
+              "question": "Como o autor define virtudes intelectuais e morais?",
+              "answers": [
+                {
+                  "text": "virtude, intelectual e moral, a primeira, por via de regra, gera-se e cresce graças ao ensino - por isso requer experiência e tempo; enquanto a virtude moral é adquirida em resultado do hábito, donde ter-se formado o seu nome por uma pequena modificação da palavra",
+                  "answer_start": 32
+                }
+              ],
+              "is_impossible": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "exemplo",
+      "paragraphs": [
+        {
+          "context": "Sendo, pois, de duas espécies a virtude, intelectual e moral, a primeira, por via de regra, gera-se e cresce graças ao ensino - por isso requer experiência e tempo; enquanto a virtude moral é adquirida em resultado do hábito, donde ter-se formado o seu nome por uma pequena modificação da palavra (em grego, a vogal 'e' do termo ethos é escrita ora com epsilon, ora com etha, significando respectivamente hábito ou caráter). Por tudo isso, evidencia-se também que nenhuma das virtudes morais surge em nós por natureza; com efeito, nada do que existe naturalmente pode formar um hábito contrário à sua natureza. Por exemplo, à pedra que por natureza se move para baixo não se pode imprimir o hábito de ir para cima, ainda que tentemos adestrá-la jogando-a dez mil vezes no ar; nem se pode habituar o fogo a dirigir-se para baixo, nem qualquer coisa que por natureza se comporte de certa maneira a comportar-se de outra.",
+          "qas": [
+            {
+              "id": "d21aadab-209a-4d7f-bc09-556f978d33ae",
+              "question": "Como o autor discorre sobre platão?",
+              "answers": [],
+              "is_impossible": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "exemplo",
+      "paragraphs": [
+        {
+          "context": "Por outro lado, de todas as coisas que nos vêm por natureza, primeiro adquirimos a potência e mais tarde exteriorizamos os atos. Isso é evidente no caso dos sentidos, pois não foi por ver ou ouvir frequentemente que adquirimos a visão e a audição, mas, pelo contrário, nós as possuíamos antes de usá-las, e não entramos na posse delas pelo uso. Com as virtudes dá-se exatamente o oposto: adquirimo-las pelo exercício, como também sucede com as artes. Com efeito, as coisas que temos de aprender antes de poder fazê-las, aprendemo-las fazendo; por exemplo, os homens tornam-se arquitetos construindo e tocadores de lira tangendo esse instrumento. Da mesma forma, tornamo-nos justos praticando atos justos, e assim com a temperança, a bravura, etc.",
+          "qas": [
+            {
+              "id": "76b8c363-a711-4011-a81e-f99cf7939298",
+              "question": "Segundo o autor como adquirimos virtudes?",
+              "answers": [
+                {
+                  "text": "Com as virtudes dá-se exatamente o oposto: adquirimo-las pelo exercício, como também sucede com as artes. Com efeito, as coisas que temos de aprender antes de poder fazê-las, aprendemo-las fazendo",
+                  "answer_start": 345
+                }
+              ],
+              "is_impossible": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
