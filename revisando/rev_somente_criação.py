@@ -10,10 +10,10 @@ def criar_dataset_squad():
         "data": []
     }
     
-    # Solicita o título geral do tema/dataset
+    # titulo arquivo
     titulo_tema = input("Digite o título geral do tema (ex: Historia_do_Brasil): ").strip()
     
-    # Estrutura do tópico
+    # estrutura topico
     topico = {
         "title": titulo_tema,
         "paragraphs": []
@@ -34,9 +34,11 @@ def criar_dataset_squad():
             print("\n-- Adicionando uma Pergunta --")
             pergunta = input("Digite a pergunta: ").strip()
             
+            #define se é impossivwl
             is_impossible_input = input("Esta pergunta é IMPOSSÍVEL de responder com base no texto? (s/n): ").strip().lower()
             is_impossible = True if is_impossible_input == 's' else False
             
+            #ddefine estrutura 
             qa_dict = {
                 "id": f"id_{titulo_tema}_{id_contador}",
                 "question": pergunta,
@@ -51,7 +53,7 @@ def criar_dataset_squad():
                 print("\nPara perguntas respondíveis, informe a resposta exata como aparece no texto.")
                 resposta_texto = input("Digite a resposta exata: ").strip()
                 
-                # Encontra o índice automaticamente no contexto
+                # Encontra o índice no contexto
                 answer_start = contexto.find(resposta_texto)
                 
                 if answer_start == -1:
@@ -65,7 +67,7 @@ def criar_dataset_squad():
                     "answer_start": answer_start
                 })
             else:
-                # Pergunta Impossível (SQuAD 2.0 pede uma resposta plausível opcional)
+                # se impossivel é opcional colocar resposta plausivel
                 print("\n[Opcional] Para perguntas impossíveis, você pode sugerir uma resposta 'plausível' (que parece certa, mas está errada).")
                 quer_plausivel = input("Deseja adicionar uma resposta plausível? (s/n): ").strip().lower()
                 

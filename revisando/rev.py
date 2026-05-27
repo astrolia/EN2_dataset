@@ -10,10 +10,10 @@ def criar_dataset_squad():
         "data": []
     }
     
-    # Solicita o título geral do tema/dataset
+    # titulo arquivo
     titulo_tema = input("Digite o título geral do tema (ex: Historia_do_Brasil): ").strip()
     
-    # Estrutura do tópico
+    # estrutura topico
     topico = {
         "title": titulo_tema,
         "paragraphs": []
@@ -34,9 +34,11 @@ def criar_dataset_squad():
             print("\n-- Adicionando uma Pergunta --")
             pergunta = input("Digite a pergunta: ").strip()
             
+            #define se é impossivwl
             is_impossible_input = input("Esta pergunta é IMPOSSÍVEL de responder com base no texto? (s/n): ").strip().lower()
             is_impossible = True if is_impossible_input == 's' else False
             
+            #ddefine estrutura 
             qa_dict = {
                 "id": f"id_{titulo_tema}_{id_contador}",
                 "question": pergunta,
@@ -51,7 +53,7 @@ def criar_dataset_squad():
                 print("\nPara perguntas respondíveis, informe a resposta exata como aparece no texto.")
                 resposta_texto = input("Digite a resposta exata: ").strip()
                 
-                # Encontra o índice automaticamente no contexto
+                # Encontra o índice no contexto
                 answer_start = contexto.find(resposta_texto)
                 
                 if answer_start == -1:
@@ -60,15 +62,17 @@ def criar_dataset_squad():
                     resposta_texto = input("Digite a resposta exata (letras maiúsculas/minúsculas importam): ").strip()
                     answer_start = contexto.find(resposta_texto)
                 
+                #add resposta em answers
                 qa_dict["answers"].append({
                     "text": resposta_texto,
                     "answer_start": answer_start
                 })
             else:
-                # Pergunta Impossível (SQuAD 2.0 pede uma resposta plausível opcional)
+                # se impossivel é opcional colocar resposta plausivel
                 print("\n[Opcional] Para perguntas impossíveis, você pode sugerir uma resposta 'plausível' (que parece certa, mas está errada).")
                 quer_plausivel = input("Deseja adicionar uma resposta plausível? (s/n): ").strip().lower()
                 
+                # define resposta plausivel e confere se esta no contexto
                 if quer_plausivel == 's':
                     resposta_plausivel = input("Digite a resposta plausível: ").strip()
                     answer_start_plausivel = contexto.find(resposta_plausivel)
@@ -100,14 +104,10 @@ def criar_dataset_squad():
     with open(nome_arquivo, 'w', encoding='utf-8') as f:
         json.dump(dataset, f, ensure_ascii=False, indent=2)
         
-    print(f"\n» Sucesso! Dataset salvo com sucesso em: {os.path.abspath(nome_arquivo)}")
+    print(f"\nDataset salvo com sucesso em: {os.path.abspath(nome_arquivo)}")
 
-
+#normaliza espaços e letras
 def normalizar_texto(texto):
-    """
-    Remove espaços extras e padroniza o texto para evitar que 
-    pequenas diferenças de digitação (como um espaço no fim) criem duplicatas.
-    """
     return " ".join(texto.strip().lower().split())
 
 def fazer_merge_squad(arquivo_principal, arquivo_novo, arquivo_saida):
@@ -127,52 +127,51 @@ def fazer_merge_squad(arquivo_principal, arquivo_novo, arquivo_saida):
     with open(arquivo_novo, 'r', encoding='utf-8') as f:
         novo_data = json.load(f)
 
-    # Dicionário auxiliar para mapear: contexto_normalizado -> dict_do_paragrafo_original
-    # Isso acelera a busca e evita loops complexos repetitivos
+    # dicionário auxiliar para mapear contexto_normalizado do arquivo base
     mapa_contextos = {}
     
-    # Como o SQuAD tem uma lista 'data' com vários tópicos/títulos, 
-    # vamos assumir o primeiro tópico para mapeamento (ou unificar se os títulos forem iguais)
-    # Para este algoritmo, vamos indexar todos os contextos existentes na base
+    #percorre o arquivo mapeando os contextos normalizados em mapa_contextos
     for topico in base_data.get("data", []):
         for paragrafo in topico.get("paragraphs", []):
             ctx_normalizado = normalizar_texto(paragrafo["context"])
             mapa_contextos[ctx_normalizado] = paragrafo
 
-    # Se a base estiver vazia, pegamos a estrutura do novo arquivo
+    # se a base estiver vazia cria a estrutura do novo arquivo
     if not base_data.get("data"):
         base_data["data"] = [{"title": "Dataset_Merged", "paragraphs": []}]
     
-    # Garantimos que temos pelo menos um tópico alvo para adicionar novos contextos
+    # pelo menos um tópico alvo para adicionar novos contextos, inicio do arquivo
     alvo_topico = base_data["data"][0]
 
-    # 3. Processa o novo arquivo e faz a fusão
+    # contadores
     contador_novas_perguntas = 0
     contador_novos_contextos = 0
 
+    # loop para fazer o merge
+    #primeiro pega um contexto do novo arquivo e normaliza
     for topico_novo in novo_data.get("data", []):
         for paragrafo_novo in topico_novo.get("paragraphs", []):
             ctx_novo_norm = normalizar_texto(paragrafo_novo["context"])
             
-            # CASO 1: O contexto já existe na base! (Fusão de perguntas)
+            # caso o contexto seja repetido ele pega do mapa
             if ctx_novo_norm in mapa_contextos:
                 paragrafo_existente = mapa_contextos[ctx_novo_norm]
                 
-                # Lista de IDs já existentes para evitar duplicar a MESMA pergunta
+                # lista os ids para evitar duplicatas
                 ids_existentes = {qa["id"] for qa in paragrafo_existente["qas"]}
                 
+                # caso o id n seja igual as pergundas e respostas são anexada ao final do contexto base normalmente
                 for qa_nova in paragrafo_novo["qas"]:
                     if qa_nova["id"] not in ids_existentes:
                         paragrafo_existente["qas"].append(qa_nova)
                         contador_novas_perguntas += 1
                     else:
-                        # Se o ID já existir, mas você quiser garantir que mude caso seja diferente, 
-                        # podemos gerar um sufixo, mas por padrão o SQuAD exige IDs únicos.
+                        #se o id for parecido com o existente é adicionado _dup como sufixo de diferenciação
                         qa_nova["id"] = f"{qa_nova['id']}_dup"
                         paragrafo_existente["qas"].append(qa_nova)
                         contador_novas_perguntas += 1
             
-            # CASO 2: O contexto é inédito! (Concatenado no final)
+            # se o contexto for inedito ele é adicionado ao final do arquivo normalmente
             else:
                 alvo_topico["paragraphs"].append(paragrafo_novo)
                 # Atualiza o mapa caso o próprio novo arquivo tenha contextos repetidos dele mesmo
@@ -180,7 +179,7 @@ def fazer_merge_squad(arquivo_principal, arquivo_novo, arquivo_saida):
                 contador_novos_contextos += 1
                 contador_novas_perguntas += len(paragrafo_novo["qas"])
 
-    # 4. Salva o resultado final
+    #Salva o resultado final
     with open(arquivo_saida, 'w', encoding='utf-8') as f:
         json.dump(base_data, f, ensure_ascii=False, indent=2)
         
@@ -189,9 +188,9 @@ def fazer_merge_squad(arquivo_principal, arquivo_novo, arquivo_saida):
     print(f"Total de perguntas inseridas/fundidas: {contador_novas_perguntas}")
     print(f"Arquivo salvo com sucesso em: {arquivo_saida}")
 
-# --- EXEMPLO DE USO ---
+
 if __name__ == "__main__":
-    # Criando dois arquivos JSON fictícios para demonstrar o funcionamento
+    # exemplos
     """arquivo1 = {
         "version": "v2.0",
         "data": [{
@@ -209,12 +208,12 @@ if __name__ == "__main__":
             "title": "Exemplo",
             "paragraphs": [
                 {
-                    # Mesmo contexto (com uma pequena variação de espaço/maíuscula para testar a robustez)
+                    # contexto similar com variação de identação
                     "context": "  A inteligência artificial é o futuro da tecnologia. ",
                     "qas": [{"id": "q2", "question": "Do que a IA é o futuro?", "is_impossible": False, "answers": [{"text": "da tecnologia", "answer_start": 37}]}]
                 },
                 {
-                    # Contexto completamente novo
+                    # contexto novo
                     "context": "O Python é uma linguagem de programação muito popular.",
                     "qas": [{"id": "q3", "question": "O Python é o quê?", "is_impossible": False, "answers": [{"text": "linguagem de programação", "answer_start": 15}]}]
                 }
@@ -226,7 +225,7 @@ if __name__ == "__main__":
     with open("dataset_a.json", "w", encoding="utf-8") as f: json.dump(arquivo1, f)
     with open("dataset_b.json", "w", encoding="utf-8") as f: json.dump(arquivo2, f)
 """
-    # Executando a função de Merge
+
     fazer_merge_squad(
         arquivo_principal="merge2_dataset.json", 
         arquivo_novo="quarto_dataset.json", 
