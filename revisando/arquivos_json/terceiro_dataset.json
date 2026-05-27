@@ -1,0 +1,44 @@
+{
+  "version": "v2.0",
+  "data": [
+    {
+      "title": "marco zero",
+      "paragraphs": [
+        {
+          "context": "scalene banda",
+          "qas": [
+            {
+              "id": "id_marco zero_1",
+              "question": "banda",
+              "is_impossible": false,
+              "answers": [
+                {
+                  "text": "scalene",
+                  "answer_start": 0
+                }
+              ],
+              "plausible_answers": []
+            }
+          ]
+        },
+        {
+          "context": "eu sou o homem de ferro",
+          "qas": [
+            {
+              "id": "id_marco zero_2",
+              "question": "de?",
+              "is_impossible": false,
+              "answers": [
+                {
+                  "text": "ferro",
+                  "answer_start": 18
+                }
+              ],
+              "plausible_answers": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
